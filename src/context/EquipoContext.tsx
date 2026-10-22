@@ -109,8 +109,9 @@ export function EquipoProvider({ children }: { children: ReactNode }) {
     const miembro = equipo.find((m) => m.id === id)
     if (!miembro) return
     await actualizarRol(uidActual(), id, rol)
-    miembro.rol = rol
-    setEquipo(equipo)
+    const lista = equipo.map((m) => (m.id === id ? { ...m, rol } : m))
+    setEquipo(lista)
+    await guardarCache(lista)
   }
 
   async function sembrar(): Promise<void> {
