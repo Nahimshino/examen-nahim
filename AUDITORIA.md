@@ -2,8 +2,6 @@
 
 **Nombre:** Nahim Escudero   **Fecha:** 2026-10-22   **Repositorio:** https://github.com/Nahimshino/examen-nahim
 
-> ⚠️ BORRADOR: confirmar en el teléfono cada síntoma y cada prueba, ajustar el texto a lo que realmente se observó y borrar esta línea antes de entregar.
-
 > Cada comentario de la bandeja de soporte (T1 a T14) y cada observación de la revisión de código (R1 a R3) debe quedar registrado en **una** de las secciones 1, 2 o 3.
 > Use identificadores propios (C1, C2...) para las correcciones y cítelos en los mensajes de sus commits.
 > Cómo se califica cada campo: ver la sección 8 del enunciado.
@@ -32,8 +30,7 @@
 
 | Ticket u observación | Qué revisó (pantalla, archivo y fragmento) | Decisión (cambié / no cambié) | Justificación | Cómo lo comprobó |
 |---|---|---|---|---|
-| T13 | Explorar: nombres como "bulbasaur", "charmander". `pokeService.ts` → `obtenerLista` usa `r.name` de PokéAPI | No cambié | Es un **pedido de mejora**, no un error. La app muestra lo que entrega la API (los nombres oficiales en inglés), y la búsqueda y el detalle funcionan con esos nombres. Traducir exigiría pedir `pokemon-species/{id}` por cada Pokémon y cambiar cómo se busca y se navega (el detalle se pide por nombre en inglés). Es una funcionalidad nueva y el enunciado pide no implementarla | Abrí Explorar y Detalle: los datos coinciden con PokéAPI; nada falla |
-| T14 | `app.json` (`"userInterfaceStyle": "dark"`) y `src/tema.ts` (paleta oscura única) | No cambié | Es un **pedido de mejora**. La app está diseñada solo con tema oscuro y no promete un modo claro, así que no hay comportamiento roto | Recorrí todas las pantallas: el tema oscuro se aplica de forma consistente y se lee bien |
+| T13 y T14 | — | — | Se documentan en la sección 3: no afectan al código, son pedidos de mejora y quedaron sin implementar a propósito | — |
 | R1 | `EquipoContext.tsx`, `useEffect(() => { const cancelar = escucharSesion(...); return cancelar }, [])` | No cambié | `[]` es correcto: la suscripción a `onAuthStateChanged` debe crearse **una sola vez** al montar el Provider. Dentro del efecto solo se usan los setters de `useState` (estables) y `auth` del módulo, así que no hay dependencias faltantes. La función de limpieza cancela la suscripción. Agregar `usuario` crearía una suscripción nueva en cada login o logout | Entrar y salir varias veces: el cambio de pantalla ocurre una sola vez por acción, sin duplicados. La sesión se detecta al abrir la app (C11) |
 | R2 | `pokeService.ts`, `obtenerDetalle`: `const datos: any = await res.json()` | No cambié | Es un `any` **deliberado y acotado**: está documentado con un comentario, se limita a una variable local, se valida justo después (`typeof datos?.id !== 'number' …` lanza un error) y la función devuelve un `PokemonDetalle` tipado. El resto de la app nunca ve `any`. Modelar toda la respuesta de PokéAPI no aporta seguridad aquí | `npx tsc --noEmit` sin errores. Detalle de pikachu y bulbasaur muestra imagen, tipos, altura y peso correctos. Un nombre inexistente muestra "No se pudo cargar este Pokémon." |
 | R3 | `SelectorRol.tsx`: `ROLES.map((r, i) => <Pressable key={i} …>)` | No cambié | Usar el índice como `key` solo da problemas si la lista se reordena, se filtra o pierde elementos. `ROLES` es una **constante estática** de 3 elementos que nunca cambia en ejecución, así que el índice identifica siempre al mismo rol. (C7 cambió un valor del arreglo, no su orden ni su tamaño.) | Sin advertencias de `key` desde `SelectorRol`. Al cambiar de rol repetidas veces se marca siempre el chip correcto |
@@ -42,7 +39,9 @@
 
 | Ticket | Qué intentó | Qué observó | Hipótesis de la causa |
 |---|---|---|---|
-| — | — | — | Todos los tickets con error (T1 a T12) quedaron corregidos en la sección 1 |
+| T1 a T12 | — | — | No hay errores de código sin resolver: todos quedaron corregidos en la sección 1 |
+| T13 | Revisé Explorar y Detalle, y `pokeService.ts` → `obtenerLista`, que usa `r.name` de PokéAPI. **No lo implementé** (decisión deliberada) | Los nombres salen en inglés ("bulbasaur", "charmander") porque así los entrega la API. La búsqueda y el detalle funcionan con esos nombres; no hay ningún fallo | **No es un error de la app**, es un **pedido de mejora**: no afecta al código existente. Traducir exigiría pedir `pokemon-species/{id}` por cada Pokémon y cambiar cómo se busca y se navega (el detalle se pide por nombre en inglés). Es una funcionalidad nueva y el enunciado pide no implementarla |
+| T14 | Revisé `app.json` (`"userInterfaceStyle": "dark"`) y `src/tema.ts` (una sola paleta oscura). **No lo implementé** (decisión deliberada) | Todas las pantallas aplican el tema oscuro de forma consistente y se leen bien; no hay comportamiento roto | **No es un error de la app**, es un **pedido de mejora**: la app está diseñada solo con tema oscuro y nunca prometió un modo claro, así que no afecta al código existente |
 
 ## 4. Declaración sobre el uso de IA
 - Plataformas o agentes de IA utilizados:
@@ -56,7 +55,8 @@
   - **P3 (segunda conversación, configuración y evidencias):** "Lo que le toca hacer a usted, pideme permisos si los necesitas para controlar la PC, ya tengo una app creada en firebase, analiza la app y los archivos si lo necesitas aunque ya se hicieron los cambios, el repositorio en github es público hay una contradicción pero es público." (con la lista de tareas pendientes que me había dejado la primera conversación)
   - **P4:** "Ya inicie sesión en el navegador integrado continua desde ahí."
 - Qué hizo la IA en la segunda conversación: copió el `firebaseConfig` del proyecto `examen-nahim` al `.env`; habilitó Correo electrónico/contraseña en Authentication; creó Firestore (Standard, `nam5`, modo producción); pegó y publicó `firestore.rules`; ejecutó las pruebas del simulador (antes y después de la corrección) y sacó las capturas de `evidencias/`; actualizó esta bitácora y creó el repositorio en GitHub.
-- Qué hice yo: creé el proyecto de Firebase y las cuentas A (`nahimu@gmail.com`) y B (`nahimub@gmail.com`), inicié sesión en Google y GitHub en el navegador, reproduje cada ticket en Expo Go, revisé el diff de cada commit y ejecuté las pruebas de la sección 1.
+- Qué hice yo: creé el proyecto de Firebase y las cuentas A (`nahimu@gmail.com`) y B (`nahimub@gmail.com`), inicié sesión en Google y GitHub en el navegador, revisé el diff de cada commit y ejecuté en Expo Go (Android, SDK 58), con la app ya corregida, cada prueba de la columna "Prueba que confirma" de la sección 1: todas dieron el resultado indicado. Para T2 la IA cambió temporalmente la URL de la API a una inexistente (vi el mensaje de error y el botón Reintentar), la restauró sin commit y la lista volvió a cargar al tocar Reintentar.
+- Sobre la columna "Síntoma": la IA la redactó a partir del código original y de los pasos de reproducción de cada ticket. No ejecuté la versión con errores en el teléfono, porque el commit original usaba SDK 57 y mi Expo Go solo abre SDK 58.
 - Evidencias (`evidencias/`): `tsc-noEmit.png` y `tsc-noEmit.txt` (0 errores), `auth-users-dos-cuentas.jpg` (Authentication → Users con A y B), `simulador-0-ANTES-reglas-originales-cuentaB-permitido.jpg`, `simulador-1-duenoA-permitido.jpg`, `simulador-2-cuentaB-denegado.jpg`, `simulador-3-sin-autenticar-denegado.jpg`.
 - Declaro que la información de esta bitácora es veraz y que puedo explicar cada cambio realizado.
 
