@@ -4,3 +4,4 @@ dist/
 .env
 .env.local
 *.stackdump
+expo-env.d.ts
