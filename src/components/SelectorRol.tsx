@@ -3,7 +3,7 @@ import { ETIQUETA_ROL } from '../types'
 import type { Rol } from '../types'
 import { C } from '../tema'
 
-const ROLES: Rol[] = ['titular', 'reserva', 'suplente']
+const ROLES: Rol[] = ['titular', 'reserva', 'banca']
 
 interface Props {
   actual: Rol
