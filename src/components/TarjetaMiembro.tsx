@@ -29,7 +29,7 @@ export default function TarjetaMiembro({ miembro, onCambiarRol, onQuitar }: Prop
         <View>
           <Text style={estilos.tipos}>Tipos: {miembro.tipos.join(', ')}</Text>
           <SelectorRol actual={miembro.rol} onElegir={(rol) => onCambiarRol(miembro.id, rol)} />
-          <Pressable onClick={() => onQuitar(miembro)} style={estilos.botonQuitar}>
+          <Pressable onPress={() => onQuitar(miembro)} style={estilos.botonQuitar}>
             <Text style={estilos.textoQuitar}>Quitar</Text>
           </Pressable>
         </View>
