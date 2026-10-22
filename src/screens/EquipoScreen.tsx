@@ -25,7 +25,7 @@ export default function EquipoScreen() {
       {equipo.length > 0 && (
         <ScrollView contentContainerStyle={estilos.lista}>
             {equipo.map((m) => (
-              <TarjetaMiembro miembro={m} onCambiarRol={cambiarRol} onQuitar={(mm) => quitar(mm.id)} />
+              <TarjetaMiembro key={m.id} miembro={m} onCambiarRol={cambiarRol} onQuitar={(mm) => quitar(mm.id)} />
             ))}
         </ScrollView>
       )}
