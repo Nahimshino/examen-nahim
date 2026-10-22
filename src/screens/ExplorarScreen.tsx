@@ -29,7 +29,7 @@ export default function ExplorarScreen() {
     if (estado.tipo === 'exito') {
       setVisibles(estado.datos.filter((p) => p.nombre.includes(busqueda.toLowerCase())))
     }
-  }, [estado])
+  }, [estado, busqueda])
 
   return (
     <View style={estilos.pantalla}>
