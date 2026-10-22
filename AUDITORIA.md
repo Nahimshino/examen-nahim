@@ -26,6 +26,8 @@
 
 **Cambio de entorno (no es corrección de ticket):** commit `6bb50be` `chore`: se registraron las versiones del entorno del examen (Expo SDK 57, `metro.config.js`, plantilla de `AUDITORIA.md`) y se restauró `expo-env.d.ts` (`/// <reference types="expo/types" />`). Sin ese archivo `tsc` daba 12 errores `Cannot find name 'process'`, porque los tipos de `process.env` vienen de `expo/types`.
 
+**Cambio de entorno (no es corrección de ticket):** commit `032dceb` `chore`: actualización a **Expo SDK 58**. Motivo: al abrir el proyecto, Expo Go (versión de la tienda) mostraba `Project is incompatible with this version of Expo Go • The installed version of Expo Go is for SDK 58. • The project you opened uses SDK 57.`. Cambios: `npx expo install expo@~58` y `npx expo install --fix` (react 19.3.0, react-native 0.88.0 y librerías alineadas). En `metro.config.js`, los `exports` de package.json se desactivan **solo para firebase/@firebase**: con la desactivación global, RN 0.88 no empaquetaba (`Unable to resolve module react-native/react-private-interface`). La referencia `expo/types` pasó a `src/types/globales.d.ts`, porque Expo CLI borra `expo-env.d.ts` al arrancar. Verificación: `npx tsc --noEmit` sin errores, `npx expo install --check` → "Dependencies are up to date", y `npx expo export --platform android` empaqueta 862 módulos usando `@firebase/auth/dist/rn` (necesario para la sesión persistente de C11).
+
 ## 2. Decisión sobre T13, T14 y R1 a R3
 
 | Ticket u observación | Qué revisó (pantalla, archivo y fragmento) | Decisión (cambié / no cambié) | Justificación | Cómo lo comprobó |

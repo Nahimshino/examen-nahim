@@ -22,6 +22,10 @@ La app arrancaba pero tenía 11 errores repartidos en 12 tickets (T1–T12), má
 - Leí el enunciado, la guía de Firebase, las notas de la Semana 9 y la descripción de la plataforma. Revisé todo el código de `src/`.
 - `npm install` y `npx tsc --noEmit`: **14 errores**. 12 eran `Cannot find name 'process'`, porque se había borrado `expo-env.d.ts`, que carga los tipos de `expo/types`. Los otros 2 corresponden a T4 y T7.
 - Restauré `expo-env.d.ts` y guardé las versiones del entorno (Expo SDK 57, `metro.config.js`) en un commit aparte para no mezclarlas con las correcciones → `6bb50be`.
+- Más tarde, Expo Go del teléfono rechazó el proyecto ("The installed version of Expo Go is for SDK 58. The project you opened uses SDK 57"). Actualicé a **SDK 58** en un commit aparte → `032dceb`:
+  - `npx expo install expo@~58` + `--fix`.
+  - En `metro.config.js`, los `exports` se desactivan solo para Firebase, porque React Native 0.88 los necesita.
+  - Los tipos de Expo pasaron a `src/types/globales.d.ts`, porque Expo CLI borra `expo-env.d.ts` al arrancar.
 
 ### Paso 1 — C1 · T12: secretos y Git (`c778ce1`)
 - **Causa:** `.gitignore` no incluía `.env`, y `src/config/claves.ts` tenía una clave de administración escrita en el código.
@@ -77,7 +81,7 @@ La app arrancaba pero tenía 11 errores repartidos en 12 tickets (T1–T12), má
 
 ### Paso 13 — Verificación global
 - `npx tsc --noEmit` → 0 errores.
-- `npx expo export --platform android` → empaqueta 822 módulos sin errores.
+- `npx expo export --platform android` → empaqueta sin errores (822 módulos con SDK 57; 862 con SDK 58, usando la build React Native de `@firebase/auth`).
 - Recorrido en el teléfono: login → Explorar → Detalle → Mi equipo, repetido después de publicar las reglas.
 
 ## Lecciones
