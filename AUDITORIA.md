@@ -1,6 +1,6 @@
 # Bitácora de auditoría — Examen práctico parcial
 
-**Nombre:** Nahim Escudero   **Fecha:** 2026-10-22   **Repositorio:** ______________________
+**Nombre:** Nahim Escudero   **Fecha:** 2026-10-22   **Repositorio:** https://github.com/Nahimshino/examen-nahim
 
 > ⚠️ BORRADOR: confirmar en el teléfono cada síntoma y cada prueba, ajustar el texto a lo que realmente se observó y borrar esta línea antes de entregar.
 
