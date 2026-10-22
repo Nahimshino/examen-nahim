@@ -14,8 +14,15 @@ export default function ExplorarScreen() {
   const [busqueda, setBusqueda] = useState('')
   const [visibles, setVisibles] = useState<PokemonResumen[]>([])
 
+  function cargar() {
+    setEstado({ tipo: 'cargando' })
+    obtenerLista()
+      .then((datos) => setEstado({ tipo: 'exito', datos }))
+      .catch(() => setEstado({ tipo: 'error', mensaje: 'No se pudo cargar la lista de Pokémon. Revisa tu conexión.' }))
+  }
+
   useEffect(() => {
-    obtenerLista().then((datos) => setEstado({ tipo: 'exito', datos }))
+    cargar()
   }, [])
 
   useEffect(() => {
@@ -33,6 +40,12 @@ export default function ExplorarScreen() {
       <TextInput style={estilos.buscador} placeholder="Buscar por nombre..." placeholderTextColor={C.suave} value={busqueda} onChangeText={setBusqueda} autoCapitalize="none" />
       <View style={{ flex: 1 }}>
         {estado.tipo === 'cargando' && <View style={estilos.centro}><ActivityIndicator size="large" color={C.acento} /></View>}
+        {estado.tipo === 'error' && (
+          <View style={estilos.centro}>
+            <Text style={estilos.error}>{estado.mensaje}</Text>
+            <Pressable style={estilos.botonReintentar} onPress={cargar}><Text style={estilos.textoReintentar}>Reintentar</Text></Pressable>
+          </View>
+        )}
         {estado.tipo === 'exito' && (
           <FlatList
             data={visibles}

@@ -3,9 +3,17 @@ import type { PokemonDetalle, PokemonResumen } from '../types'
 const BASE = 'https://pokeapi.co/api/v2'
 
 export async function obtenerLista(limite = 30): Promise<PokemonResumen[]> {
-  const res = await fetch(`${BASE}/pokemon?limit=${limite}`)
-  const datos = await res.json()
-  return datos.results.map((r: { name: string }, i: number) => ({ id: i + 1, nombre: r.name }))
+  // Tiempo máximo: con mala conexión fetch puede quedar esperando indefinidamente.
+  const control = new AbortController()
+  const temporizador = setTimeout(() => control.abort(), 10000)
+  try {
+    const res = await fetch(`${BASE}/pokemon?limit=${limite}`, { signal: control.signal })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const datos = await res.json()
+    return datos.results.map((r: { name: string }, i: number) => ({ id: i + 1, nombre: r.name }))
+  } finally {
+    clearTimeout(temporizador)
+  }
 }
 
 export async function obtenerDetalle(nombre: string): Promise<PokemonDetalle> {
