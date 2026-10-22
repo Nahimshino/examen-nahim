@@ -1,6 +1,8 @@
 import { initializeApp, getApps, getApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { initializeAuth, getAuth, getReactNativePersistence } from 'firebase/auth'
+import type { Auth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -13,5 +15,15 @@ const firebaseConfig = {
 
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig)
 
-export const auth = getAuth(app)
+// En React Native getAuth guarda la sesión solo en memoria: se pierde al cerrar la app.
+// initializeAuth con AsyncStorage la conserva. Si ya se inicializó (recarga en caliente), se reutiliza.
+function crearAuth(): Auth {
+  try {
+    return initializeAuth(app, { persistence: getReactNativePersistence(AsyncStorage) })
+  } catch {
+    return getAuth(app)
+  }
+}
+
+export const auth = crearAuth()
 export const db = getFirestore(app)
