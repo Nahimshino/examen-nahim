@@ -8,12 +8,20 @@ import type { MiembroEquipo, PokemonDetalle, Rol, UsuarioActual } from '../types
 const CLAVE_CACHE = '@equipo_cache'
 
 async function guardarCache(lista: MiembroEquipo[]): Promise<void> {
-  await AsyncStorage.setItem(CLAVE_CACHE, String(lista))
+  await AsyncStorage.setItem(CLAVE_CACHE, JSON.stringify(lista))
 }
 
+// Si la caché está dañada (por ejemplo, de una versión anterior), se descarta y se sigue con Firestore.
 async function leerCache(): Promise<MiembroEquipo[]> {
   const crudo = await AsyncStorage.getItem(CLAVE_CACHE)
-  return crudo ? JSON.parse(crudo) : []
+  if (!crudo) return []
+  try {
+    const datos = JSON.parse(crudo)
+    return Array.isArray(datos) ? datos : []
+  } catch {
+    await AsyncStorage.removeItem(CLAVE_CACHE)
+    return []
+  }
 }
 
 interface ValorContexto {
